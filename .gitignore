@@ -1,0 +1,15 @@
+# Virtual environments
+venv/
+__pycache__/
+*.pyc
+
+# Data files
+data/raw/*
+data/transformed/*
+
+# Credentials
+config/secrets.yaml
+.env
+
+# MacOS junk
+.DS_Store
