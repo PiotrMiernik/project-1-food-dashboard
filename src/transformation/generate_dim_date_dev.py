@@ -35,4 +35,4 @@ print(dim_date.head(15))
 print(dim_date.tail(15))
 
 # Export to CSV file
-dim_date.to_csv('dim_date.csv', index=False)
+dim_date.to_csv('data/transformed/dim_date.csv', index=False)

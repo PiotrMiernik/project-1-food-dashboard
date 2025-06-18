@@ -26,8 +26,8 @@ def lambda_handler(event, context):
     }
 
     s3 = boto3.client("s3") 
-    bucket = os.environ["PROJECT-1-FOOD-DASHBOARD"]
-    prefix = os.environ.get("S3_PREFIX", "raw/")    
+    s3_bucket = os.environ["S3_BUCKET_PROJECT_1"]
+    raw_prefix = os.environ.get("S3_PREFIX_RAW", "raw/")    
 
     for filename, url in data_sources.items():
         response = requests.get(url, stream=True)
@@ -39,7 +39,7 @@ def lambda_handler(event, context):
                 extension = ".zip"
             else:
                 extension = ""
-            s3.put_object(Bucket=bucket, Key=f"{prefix}{filename}{extension}", Body=buffer.getvalue())
+            s3.put_object(Bucket=s3_bucket, Key=f"{raw_prefix}{filename}{extension}", Body=buffer.getvalue())
         else:
             raise Exception(f"Failed to download {filename}")
     return {"status": "success"}

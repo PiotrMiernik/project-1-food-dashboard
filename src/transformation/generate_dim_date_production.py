@@ -11,7 +11,7 @@ def lambda_handler(event, context):
 
     # Get bucket and prefix from environment variables
     s3_bucket = os.environ['S3_BUCKET_PROJECT_1']
-    s3_prefix = os.environ.get('S3_PREFIX_TRANSFORMED', 'transformed/')
+    transformed_prefix = os.environ.get('S3_PREFIX_TRANSFORMED', 'transformed/')
 
     # Dynamic date range based on current year
     start_year = 1960
@@ -48,7 +48,7 @@ def lambda_handler(event, context):
 
     # Upload to S3
     s3 = boto3.client('s3')
-    s3_key = f"{s3_prefix}dim_date.csv"
+    s3_key = f"{transformed_prefix}dim_date.csv"
     s3.put_object(Bucket=s3_bucket, Key=s3_key, Body=csv_buffer.getvalue())
 
     return {
