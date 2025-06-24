@@ -55,6 +55,7 @@ def lambda_handler(event, context):
     # Build final dimension table
     dim_country = df_enriched[['country_id', 'Area', 'continent']]
     dim_country.rename(columns={'Area': 'country_name', 'continent': 'continent_name'}, inplace=True)
+    dim_country = dim_country[dim_country['continent_name'].notna()]
     
     # Write transformed file to S3 (transformed zone)
     csv_buffer = BytesIO()

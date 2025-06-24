@@ -60,7 +60,7 @@ CREATE INDEX idx_fact_prices_product ON fact_prices(product_id);
 
 COMMENT ON TABLE dim_date IS 'Time dimension table (monthly aggregation)';
 COMMENT ON COLUMN dim_date.date_id IS 'Unique month identifier (e.g., 202501 for January 2025)';
-COMMENT ON TABLE dim_product IS 'Product dimension table (Wheat, Corn, Rice, Soya)';
+COMMENT ON TABLE dim_product IS 'Product dimension table (Maze, Potatoes, Rice, Soya, Wheat)';
 COMMENT ON TABLE dim_country IS 'Countries and continents dimension table';
 COMMENT ON TABLE fact_metrics IS 'Fact table with data on production, consumption, import, and export of products, as well as population for individual countries';
 COMMENT ON TABLE fact_prices IS 'Fact table with product pricing data';

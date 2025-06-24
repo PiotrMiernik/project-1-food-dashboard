@@ -33,6 +33,7 @@ df_enriched['country_id'] = df_enriched.index + 1
 # Select final columns according to warehouse schema
 dim_country = df_enriched[['country_id', 'Area', 'continent_name']]
 dim_country.rename(columns={'Area': 'country_name'}, inplace=True)
+dim_country = dim_country[dim_country['continent_name'].notna()]
 
 # Export transformed file
 dim_country.to_csv('data/transformed/dim_country.csv', index=False)
