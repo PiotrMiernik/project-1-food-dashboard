@@ -68,3 +68,4 @@ fact_prices['price_month_change_pct'] = fact_prices['price_month_change_pct'].ro
 # EXPORT TO CSV
 fact_prices.to_csv('data/transformed/fact_prices.csv', index=False)
 print(fact_prices.head())
+
