@@ -1,10 +1,13 @@
 import pandas as pd
+import zipfile
+from pathlib import Path
 
-# Source file location
-SOURCE_FILE = 'data/raw/FAO/Value_of_Production/Value_of_Production_E_All_data.csv'
+# Source ZIP file and internal CSV filename
+ZIP_PATH = Path("data/raw/FAO/Value_of_Production/faostat_production.zip")
+CSV_FILENAME_IN_ZIP = "Value_of_Production_E_All_Data.csv"
 
-# Dictionary of products of interest    
-PRODUCTS_OF_INTREST = {
+# Dictionary of products of interest
+PRODUCTS_OF_INTEREST = {
     "Wheat": "Wheat",
     "Maize (corn)": "Maize",
     "Rice": "Rice",
@@ -12,34 +15,35 @@ PRODUCTS_OF_INTREST = {
     "Potatoes": "Potatoes"
 }
 
-# Read data from source file
-df_raw = pd.read_csv(SOURCE_FILE, encoding='utf-8')
+# Read CSV directly from ZIP archive
+with zipfile.ZipFile(ZIP_PATH, 'r') as z:
+    with z.open(CSV_FILENAME_IN_ZIP) as f:
+        df_raw = pd.read_csv(f, encoding='utf-8')
 
 # Select and filter relevant columns
 df_products = df_raw[['Item Code', 'Item']].drop_duplicates()
 
 # Filter products of interest
-df_filtered = df_products[df_products['Item'].isin(PRODUCTS_OF_INTREST.keys())].copy()
+df_filtered = df_products[df_products['Item'].isin(PRODUCTS_OF_INTEREST.keys())].copy()
+df_filtered['product_name'] = df_filtered['Item'].map(PRODUCTS_OF_INTEREST)
 
-#Procucts name mapping
-df_filtered['product_name'] = df_filtered['Item'].map(PRODUCTS_OF_INTREST)
+# Remove unnecessary column
+df_filtered = df_filtered[['product_name']].drop_duplicates()
 
-# Create surrogate key for product_id (simulating SERIAL PK in PostgreSQL)
-df_filtered.reset_index(drop=True, inplace=True)
-df_filtered['product_id'] = df_filtered.index + 1  # start from 1
+# Add technical row for population metric
+technical_row = pd.DataFrame([{'product_name': 'N/A'}])
+df_final = pd.concat([technical_row, df_filtered], ignore_index=True)
 
-# Reorder columns according to target table schema
-dim_product = df_filtered[['product_id', 'product_name']]
+# Assign product_id starting from 0
+df_final.reset_index(inplace=True)
+df_final.rename(columns={'index': 'product_id'}, inplace=True)
+
+# Reorder columns
+dim_product = df_final[['product_id', 'product_name']]
 
 # Preview
 print(dim_product)
 
 # Save to CSV
 dim_product.to_csv('data/transformed/dim_product.csv', index=False)
-
-
-
-
-
-
 

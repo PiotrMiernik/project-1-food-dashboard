@@ -1,4 +1,3 @@
-
 -- Table: dim_date
 CREATE TABLE dim_date (
     date_id SERIAL PRIMARY KEY,
@@ -28,9 +27,8 @@ CREATE TABLE fact_metrics (
     date_id INT NOT NULL,
     product_id INT NOT NULL,
     country_id INT NOT NULL,
-    metric_type VARCHAR(50) NOT NULL, -- 'production', 'consumption', 'import', 'export'
+    metric_type VARCHAR(50) NOT NULL, -- 'production', 'consumption', 'import', 'export', 'population'
     value DECIMAL(10, 2),
-    population INT,
     FOREIGN KEY (date_id) REFERENCES dim_date(date_id),
     FOREIGN KEY (product_id) REFERENCES dim_product(product_id),
     FOREIGN KEY (country_id) REFERENCES dim_country(country_id)
@@ -57,12 +55,13 @@ CREATE INDEX idx_fact_prices_date ON fact_prices(date_id);
 CREATE INDEX idx_fact_prices_product ON fact_prices(product_id);
 
 -- Table and column comments    
-
 COMMENT ON TABLE dim_date IS 'Time dimension table (monthly aggregation)';
 COMMENT ON COLUMN dim_date.date_id IS 'Unique month identifier (e.g., 202501 for January 2025)';
-COMMENT ON TABLE dim_product IS 'Product dimension table (Maze, Potatoes, Rice, Soya, Wheat)';
+COMMENT ON TABLE dim_product IS 'Product dimension table (Maize, Potatoes, Rice, Soya, Wheat)';
 COMMENT ON TABLE dim_country IS 'Countries and continents dimension table';
-COMMENT ON TABLE fact_metrics IS 'Fact table with data on production, consumption, import, and export of products, as well as population for individual countries';
+COMMENT ON TABLE fact_metrics IS 'Fact table with data on production, consumption, import, export, and population of products and countries over time';
+COMMENT ON COLUMN fact_metrics.metric_type IS 'Type of metric: production, consumption, import, export, or population';
+COMMENT ON COLUMN fact_metrics.value IS 'Metric value (unit depends on metric type)';
 COMMENT ON TABLE fact_prices IS 'Fact table with product pricing data';
 COMMENT ON COLUMN fact_prices.avg_annual_price IS 'Average annual product price in USD';
 COMMENT ON COLUMN fact_prices.price_annual_change_pct IS 'Year-over-year percentage change in price';

@@ -1,7 +1,10 @@
 import pandas as pd
+import zipfile
+from pathlib import Path
 
 # CONFIG
-SOURCE_FILE = 'data/raw/FAO/FoodBalance/FoodBalanceSheets_E_All_Data.csv'
+ZIP_PATH = Path("data/raw/FAO/FoodBalance/faostat_consumption.zip")
+CSV_FILENAME_IN_ZIP = "FoodBalanceSheets_E_All_Data.csv"
 PRODUCTS_MAPPING = {
     'Wheat and products': 'Wheat',
     'Rice and products': 'Rice',
@@ -12,8 +15,10 @@ PRODUCTS_MAPPING = {
 }
 METRIC_TYPE = 'consumption'
 
-# READ DATA
-df_raw = pd.read_csv(SOURCE_FILE, encoding='utf-8')
+# READ DATA FROM ZIP
+with zipfile.ZipFile(ZIP_PATH, 'r') as z:
+    with z.open(CSV_FILENAME_IN_ZIP) as f:
+        df_raw = pd.read_csv(f, encoding='utf-8')
 
 # FILTER BY ELEMENT CODE = 5142 AND ELEMENT = 'Food'
 df_filtered = df_raw[(df_raw['Element Code'] == 5142) & (df_raw['Element'] == 'Food')].copy()

@@ -1,7 +1,10 @@
 import pandas as pd
+import zipfile
+from pathlib import Path
 
 # CONFIG
-SOURCE_FILE = 'data/raw/FAO/Value_of_Production/Value_of_Production_E_All_Data.csv'
+ZIP_PATH = Path("data/raw/FAO/Value_of_Production/faostat_production.zip")
+CSV_FILENAME_IN_ZIP = "Value_of_Production_E_All_Data.csv"
 PRODUCTS_MAPPING = {
     'Wheat': 'Wheat',
     'Maize (corn)': 'Maize',
@@ -12,18 +15,20 @@ PRODUCTS_MAPPING = {
 }
 METRIC_TYPE = 'production'
 
-# READ DATA
-df_raw = pd.read_csv(SOURCE_FILE, encoding='utf-8')
+# READ DATA FROM ZIP
+with zipfile.ZipFile(ZIP_PATH, 'r') as z:
+    with z.open(CSV_FILENAME_IN_ZIP) as f:
+        df_raw = pd.read_csv(f, encoding='utf-8')
 
-# FILTER BY ELEMENT CODE = 152
+# FILTER BY ELEMENT CODE = 152 (Value of agricultural production in 1000 I$)
 df_filtered = df_raw[df_raw['Element Code'] == 152].copy()
 
 # FILTER PRODUCTS OF INTEREST
 df_filtered = df_filtered[df_filtered['Item'].isin(PRODUCTS_MAPPING.keys())].copy()
 df_filtered['product_name'] = df_filtered['Item'].map(PRODUCTS_MAPPING)
 
-# MELT YEAR COLUMNS
-year_cols = [col for col in df_filtered.columns if col.startswith('Y') and not col.endswith('F')]
+# MELT YEAR COLUMNS (drop forecast and note columns)
+year_cols = [col for col in df_filtered.columns if col.startswith('Y') and not col.endswith(('F', 'N'))]
 df_melted = df_filtered.melt(id_vars=['Area', 'product_name'], value_vars=year_cols,
                              var_name='year_str', value_name='value')
 
@@ -68,5 +73,3 @@ fact_metrics['date_id'] = fact_metrics['date_id'].astype(int)
 # EXPORT and preview for testing
 fact_metrics.to_csv('data/transformed/fact_metrics_production.csv', index=False)
 print(fact_metrics.head())
-
-

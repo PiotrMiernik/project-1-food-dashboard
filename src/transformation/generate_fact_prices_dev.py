@@ -1,7 +1,7 @@
 import pandas as pd
 
 # CONFIGURATION
-SOURCE_FILE = 'data/raw/WB/CMO-Historical-Data-Monthly.xlsx'
+SOURCE_FILE = 'data/raw/WB/wb_prices.xlsx'
 SHEET_NAME = 'Monthly Prices'
 
 # READ AND CLEAN RAW DATA

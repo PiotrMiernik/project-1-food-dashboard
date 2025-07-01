@@ -1,8 +1,12 @@
 import pandas as pd
+import zipfile
+from pathlib import Path
 
 # CONFIG
-SOURCE_FILE = 'data/raw/FAO/Trade/Trade_CropsLivestock_E_All_Data_NOFLAG.csv'
+ZIP_PATH = Path("data/raw/FAO/Trade/faostat_export_import.zip")
+CSV_FILENAME_IN_ZIP = "Trade_CropsLivestock_E_All_Data_NOFLAG.csv"
 OUTPUT_FILE = 'data/transformed/fact_metrics_trade.csv'
+
 PRODUCTS_MAPPING = {
     'Wheat': 'Wheat',
     'Maize (corn)': 'Maize',
@@ -12,14 +16,16 @@ PRODUCTS_MAPPING = {
     'Potatoes': 'Potatoes'
 }
 METRIC_TYPE_MAP = {
-    5610: 'import',
-    5910: 'export'
+    5610: 'import',  # Import quantity (t)
+    5910: 'export'   # Export quantity (t)
 }
 
-# READ DATA
-df_raw = pd.read_csv(SOURCE_FILE, encoding='utf-8')
+# READ FROM ZIP
+with zipfile.ZipFile(ZIP_PATH, 'r') as z:
+    with z.open(CSV_FILENAME_IN_ZIP) as f:
+        df_raw = pd.read_csv(f, encoding='utf-8')
 
-# FILTER BY ELEMENT CODES (import/export quantity)
+# FILTER BY ELEMENT CODE (import/export)
 df_filtered = df_raw[df_raw['Element Code'].isin(METRIC_TYPE_MAP.keys())].copy()
 
 # FILTER PRODUCTS
@@ -29,7 +35,7 @@ df_filtered['product_name'] = df_filtered['Item'].map(PRODUCTS_MAPPING)
 # MAP METRIC TYPE
 df_filtered['metric_type'] = df_filtered['Element Code'].map(METRIC_TYPE_MAP)
 
-# MELT YEAR COLUMNS
+# MELT YEARS
 year_cols = [col for col in df_filtered.columns if col.startswith('Y')]
 df_melted = df_filtered.melt(id_vars=['Area', 'product_name', 'metric_type'], 
                              value_vars=year_cols,
@@ -38,16 +44,16 @@ df_melted = df_filtered.melt(id_vars=['Area', 'product_name', 'metric_type'],
 # PARSE YEAR
 df_melted['year'] = df_melted['year_str'].str.extract(r'Y(\d{4})').astype(int)
 
-# RENAME FOR CONSISTENCY
+# RENAME
 df_melted.rename(columns={'Area': 'country_name'}, inplace=True)
 
-# LOAD DIMENSIONS
+# LOAD DIM TABLES
 dim_country = pd.read_csv('data/transformed/dim_country.csv')
 dim_product = pd.read_csv('data/transformed/dim_product.csv')
 dim_date = pd.read_csv('data/transformed/dim_date.csv')
 dim_date_filtered = dim_date[dim_date['month'] == 1][['date_id', 'year']]
 
-# JOIN DIMENSIONS
+# MERGE
 df_trade = df_melted.merge(dim_country[['country_id', 'country_name']], on='country_name', how='left')
 df_trade = df_trade.merge(dim_product[['product_id', 'product_name']], on='product_name', how='left')
 df_trade = df_trade.merge(dim_date_filtered, on='year', how='left')
