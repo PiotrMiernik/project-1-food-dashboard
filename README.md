@@ -2,29 +2,62 @@
 
 ## Goal
 
-End-to-end data pipeline for processing food production, consumption, export and import and price data, stored in AWS RDS datawarehouse, with final dashboard in Tableau.
+Build a complete ETL data pipeline for processing global food production, consumption, trade, and pricing data (for top 5 food products). The pipeline loads transformed data into an AWS RDS PostgreSQL data warehouse and supports visual analytics in Tableau.
 
 ## Technologies
 
-- AWS (S3, Lambda, RDS PostgreSQL, CloudWatch)
-- Python (Pandas, SQLAlchemy, Boto3, Requests)
-- Tableau (for BI dashboards)
-- GitHub (for version control)
+- **Cloud:** AWS S3 (data lake), AWS Lambda, AWS RDS (PostgreSQL), AWS
+  CloudWatch
+- **Python libraries:** Pandas, Boto3, Psycopg2, Requests
+- **BI tool:** Tableau
+- **Version control:** GitHub (with production/dev branches)
 
 ## Project Architecture
 
 - Data sources: FAO, World Bank
-- Raw storage: AWS S3 data lake - raw and transformed zones (buckets)
-- ETL Processing: Python scripts (pandas), AWS Lambda
+- Raw storage: AWS S3 data lake with raw and transformed zones (buckets)
+- ETL Processing: Python scripts (pandas), AWS Lambda (modular Lambda-based scripts)
 - Data Warehouse: AWS RDS (PostgreSQL)
 - Visualization: Tableau dashboard
 
-### Repository structure
+## Repository structure
 
-- `config/` — config files (S3 buckets, RDS credentials, etc.)
-- `data/` — local test datasets (sample raw and transformed files)
-- `src/` — main source code: sql data warehouse creation, extraction, transformation, loaders
-- `diagrams/` — project architecture diagram
-- `tests/` — unit tests
+├── data/                 # Local datasets (raw + transformed for testing)
 
----
+│   ├── raw/
+
+│   └── transformed/
+
+├── diagrams/             # Project architecture diagrams
+
+├── src/                  # Source code (ETL + helpers)
+
+│   ├── extraction/          # Scripts for downloading raw data
+
+│   ├── transformation/        # Scripts for transforming raw data into structured format
+
+│   ├── load/             # Scripts for loading data into AWS RDS
+
+│   ├── datawarehouse/              # SQL for building the data warehouse schema
+
+│   └── helpers/          # Reusable helper modules (e.g. s3_utils, db_utils)
+
+├── tests/                # Test cases (to be added)
+
+├── .gitignore            # Git ignore rules
+
+├── requirements.txt      # Project dependencies
+
+└── README.md             # Project overview
+
+└── LICENSE            # Usage rools
+
+## Key Features
+
+- Modular Python ETL pipeline using AWS Lambda
+- Separation of raw and transformed zones in S3
+- Production-ready dimension and fact tables
+- Helper modules for S3 and RDS operations
+- Prepared for unit and data validation tests
+
+ **Note**: This project uses environment variables in AWS Lambda for credentials and configuration, avoiding hardcoded secrets or config files in version control.
