@@ -22,9 +22,11 @@ Build a complete ETL data pipeline for processing global food production, consum
 
 ## Repository structure
 
-├── data/                 # Local datasets (raw + transformed for testing)
+├── data/                 # Local datasets (raw + transformed for testing + additional continents dataset)
 
 │   ├── raw/
+
+    ├── resources/
 
 │   └── transformed/
 
