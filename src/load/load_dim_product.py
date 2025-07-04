@@ -3,7 +3,7 @@ import pandas as pd
 import psycopg2
 from io import StringIO
 
-from src.helpers.s3_utils import load_csv_from_s3
+from src.helpers.s3_utils import read_csv_from_s3
 from src.helpers.db_utils import get_db_connection
 
 def lambda_handler(event=None, context=None):
@@ -16,7 +16,7 @@ def lambda_handler(event=None, context=None):
     transformed_key = f'{transformed_prefix}dim_product.csv'
 
     # Load data from S3
-    df = load_csv_from_s3(s3_bucket, transformed_key)
+    df = read_csv_from_s3(s3_bucket, transformed_key)
 
     # Establish DB connection
     conn = get_db_connection()
