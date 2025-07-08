@@ -2,7 +2,7 @@ import boto3
 import pandas as pd
 import pytest
 from io import BytesIO
-from moto import mock_s3
+from moto import mock_aws
 
 # Import the functions from s3_utils.py module for testing
 from helpers.s3_utils import read_csv_from_s3, read_excel_from_s3, write_csv_to_s3
@@ -19,7 +19,7 @@ def s3_setup():
     This ensures tests are isolated, fast, and don't incur AWS costs.    
     """
     # 1. Mock the S3 service: All boto3 S3 calls will be intercepted by Moto.
-    with mock_s3():
+    with mock_aws():
         # Initialize a boto3 S3 client that now interacts with the mocked S3.
         client = boto3.client("s3", region_name="us-east-1")
         client.create_bucket(Bucket=BUCKET)
