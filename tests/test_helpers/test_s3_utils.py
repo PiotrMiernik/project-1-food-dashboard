@@ -1,11 +1,17 @@
+import sys
+import os
 import boto3
 import pandas as pd
 import pytest
 from io import BytesIO
 from moto import mock_aws
 
+# Ensure the 'src/' folder is included in the Python module search path.
+# This allows local imports to work regardless of test execution context.
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../src")))
+
 # Import the functions from s3_utils.py module for testing
-from src.helpers.s3_utils import read_csv_from_s3, read_excel_from_s3, write_csv_to_s3
+from helpers.s3_utils import read_csv_from_s3, read_excel_from_s3, write_csv_to_s3
 
 # Define constants for the test environment (bucket name, file keys)
 BUCKET = "test-bucket"
