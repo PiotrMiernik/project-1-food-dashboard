@@ -5,7 +5,7 @@ from io import BytesIO
 from moto import mock_aws
 
 # Import the functions from s3_utils.py module for testing
-from helpers.s3_utils import read_csv_from_s3, read_excel_from_s3, write_csv_to_s3
+from src.helpers.s3_utils import read_csv_from_s3, read_excel_from_s3, write_csv_to_s3
 
 # Define constants for the test environment (bucket name, file keys)
 BUCKET = "test-bucket"
