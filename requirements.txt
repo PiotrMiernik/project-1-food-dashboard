@@ -4,3 +4,5 @@ requests
 psycopg2-binary
 pytest>=7.0
 moto[boto3]>=5.0
+openpyxl
+xlsxwriter
