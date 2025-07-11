@@ -8,9 +8,9 @@ Build a complete ETL data pipeline for processing global food production, consum
 
 - **Cloud:** AWS S3 (data lake), AWS Lambda, AWS RDS (PostgreSQL), AWS
   CloudWatch
-- **Python libraries:** Pandas, Boto3, Psycopg2, Requests
+- **Python libraries:** pandas, boto3, psycopg2, requests, pytest, moto, openpyxl, xlsxwriter
 - **BI tool:** Tableau
-- **Version control:** GitHub (with production/dev branches)
+- **Version control:** GitHub (with production/dev branches), GitHub Actions (CI/CD)
 
 ## Project Architecture
 
