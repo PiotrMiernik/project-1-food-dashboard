@@ -1,3 +1,5 @@
+[![Run Pytest on Push and PR](https://github.com/PiotrMiernik/project-1-food-dashboard/actions/workflows/run-tests.yml/badge.svg)](https://github.com/PiotrMiernik/project-1-food-dashboard/actions/workflows/run-tests.yml)
+
 # Food Dashboard Project
 
 ## Goal
