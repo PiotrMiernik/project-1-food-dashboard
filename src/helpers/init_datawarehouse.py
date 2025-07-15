@@ -1,4 +1,5 @@
 import os
+from dotenv import load_dotenv
 from src.helpers.db_utils import get_db_connection
 
 def execute_sql_file(sql_file_path):
@@ -20,5 +21,8 @@ def execute_sql_file(sql_file_path):
         conn.close()
 
 if __name__ == "__main__":
+    # Load environment variables from .env file
+    load_dotenv()
+
     sql_path = "src/datawarehouse/food_dw.sql"
     execute_sql_file(sql_path)
