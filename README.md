@@ -10,10 +10,9 @@ Build a complete ETL data pipeline for processing global food production, consum
 
 ## Technologies
 
-- **Cloud:** AWS S3 (data lake), AWS Lambda, AWS RDS (PostgreSQL), AWS
-  CloudWatch
+- **Cloud:** AWS S3 (data lake), Lambda, RDS (PostgreSQL), CloudWatch, SNS, Event Bridge, Budgets
 - **Python libraries:** pandas, boto3, psycopg2, requests, pytest, moto, openpyxl, xlsxwriter
-- **BI tool:** Tableau
+- **BI tool:** Tableau Desktop/ Public
 - **Version control:** GitHub (with production/dev branches), GitHub Actions (CI/CD)
 
 ## Project Architecture
@@ -26,37 +25,25 @@ Build a complete ETL data pipeline for processing global food production, consum
 
 ## Repository structure
 
-├── data/                 # Local datasets (raw + transformed for testing + additional continents dataset)
-
-│   ├── raw/
-
-    ├── resources/
-
-│   └── transformed/
-
-├── diagrams/             # Project architecture diagrams
-
-├── src/                  # Source code (ETL + helpers)
-
-│   ├── extraction/          # Scripts for downloading raw data
-
-│   ├── transformation/        # Scripts for transforming raw data into structured format
-
-│   ├── load/             # Scripts for loading data into AWS RDS
-
-│   ├── datawarehouse/              # SQL for building the data warehouse schema
-
-│   └── helpers/          # Reusable helper modules (e.g. s3_utils, db_utils)
-
-├── tests/                # Test cases (to be added)
-
-├── .gitignore            # Git ignore rules
-
-├── requirements.txt      # Project dependencies
-
-└── README.md             # Project overview
-
-└── LICENSE            # Usage rools
+├── .github/workflows/       # CI/CD workflows for automated testing and validation (GitHub Actions)
+├── data/                    # Local datasets (raw, transformed, additional resources for testing)
+│   ├── raw/                 # Raw source data
+│   ├── resources/           # Additional datasets (e.g. continent mappings)
+│   └── transformed/         # Transformed data used for testing and validation
+├── diagrams/                # Project architecture and data warehouse diagrams
+├── lambda_layer/            # AWS Lambda Layer code and dependencies for reusable packaging
+├── src/                     # Source code for ETL pipeline and supporting modules
+│   ├── extraction/          # Scripts for downloading raw data from external sources (FAO, World Bank)
+│   ├── transformation/      # Scripts for transforming raw data into structured format
+│   ├── load/                # Scripts for loading transformed data into AWS RDS (PostgreSQL) data warehouse
+│   ├── datawarehouse/       # SQL scripts for building the data warehouse schema
+│   ├── helpers/             # Reusable utility modules (e.g. s3_utils, db_utils, validation.py)
+│   └── validation/          # Script to run data validation functions on AWS using helper modules
+├── tests/                   # Unit tests for transformation, load, and helper functions
+├── .gitignore               # Git ignore rules for unnecessary files and folders
+├── requirements.txt         # Python dependencies for running the project
+├── README.md                # Project overview, setup instructions, and documentation
+└── LICENSE                  # Project license and usage rules
 
 ## Key Features
 
