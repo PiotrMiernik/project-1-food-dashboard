@@ -61,9 +61,9 @@ def test_transform_dim_product_lambda(setup_s3_mock):
     df_result = pd.read_csv(StringIO(content))
 
     # Check correctness
-    assert df_result.shape[0] == 5  # Only 5 products of interest
+    assert df_result.shape[0] == 6  # Only 6 products of interest
     assert list(df_result.columns) == ["product_id", "product_name"]
-    assert set(df_result["product_name"]) == {"Wheat", "Maize", "Rice", "Soya", "Potatoes"}
+    assert set(df_result["product_name"]) == {"_Not Applicable_", "Wheat", "Maize", "Rice", "Soya", "Potatoes"}
 
 
 

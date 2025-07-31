@@ -7,7 +7,7 @@ import zipfile
 def lambda_handler(event, context):
     """
     AWS Lambda function to process dim_product data from FAO source file stored in S3 (raw zone),
-    and save transformed file to S3 (transformed zone).
+    and save transformed file to S3 (transformed zone), including technical product_id = 0.
     """
 
     # Read AWS S3 environment variables for bucket and prefixes
@@ -43,10 +43,20 @@ def lambda_handler(event, context):
     df_filtered = df_products[df_products['Item'].isin(PRODUCTS_OF_INTEREST.keys())].copy()
     df_filtered['product_name'] = df_filtered['Item'].map(PRODUCTS_OF_INTEREST)
 
-    # Generate surrogate key
+    # Generate surrogate keys starting from 1
     df_filtered.reset_index(drop=True, inplace=True)
     df_filtered['product_id'] = df_filtered.index + 1
+
+    # Select final columns
     dim_product = df_filtered[['product_id', 'product_name']]
+
+    # ➕ Add technical row with product_id = 0
+    technical_row = pd.DataFrame([{
+        'product_id': 0,
+        'product_name': '_Not Applicable_'
+    }])
+
+    dim_product = pd.concat([technical_row, dim_product], ignore_index=True)
 
     # Convert to CSV buffer
     csv_buffer = BytesIO()
@@ -61,5 +71,5 @@ def lambda_handler(event, context):
 
     return {
         'statusCode': 200,
-        'body': 'Transformation of dim_product completed successfully!'
+        'body': 'Transformation of dim_product completed successfully with technical row!'
     }
