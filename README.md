@@ -50,10 +50,20 @@ Build a end-to-end data project with complete ETL data pipeline for processing g
 
 
 │   ├── extraction/          # Scripts for downloading raw data from external sources (FAO, World Bank)
+
+
 │   ├── transformation/      # Scripts for transforming raw data into structured format
+
+
 │   ├── load/                # Scripts for loading transformed data into AWS RDS (PostgreSQL) data warehouse
+
+
 │   ├── datawarehouse/       # SQL scripts for building the data warehouse schema
+
+
 │   ├── helpers/             # Reusable utility modules (e.g. s3_utils, db_utils, validation.py)
+
+
 │   └── validation/          # Script to run data validation functions on AWS using helper modules
 
 
