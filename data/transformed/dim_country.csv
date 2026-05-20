@@ -33,16 +33,16 @@ country_id,country_name,continent_name
 33,Central African Republic,Africa
 34,Chad,Africa
 35,Chile,South America
-"37,""China, Hong Kong SAR"",Asia"
-"38,""China, Macao SAR"",Asia"
-"39,""China, mainland"",Asia"
-"40,""China, Taiwan Province of"",Asia"
+37,China Hong Kong SAR,Asia
+38,China Macao SAR,Asia
+39,China mainland,Asia
+40,China Taiwan,Asia
 41,Colombia,South America
 42,Comoros,Africa
 43,Congo,Africa
 44,Cook Islands,Oceania
 45,Costa Rica,North America
-46,C��te d'Ivoire,Af
+46,Coste d'Ivoire,Africa
 47,Croatia,Europe
 48,Cuba,North America
 49,Cyprus,Asia
@@ -148,7 +148,7 @@ country_id,country_name,continent_name
 152,Qatar,Asia
 153,Republic of Korea,Asia
 154,Republic of Moldova,Europe
-155,R��union,Af
+155,Reunion,Africa
 156,Romania,Europe
 157,Russian Federation,Europe
 158,Rwanda,Africa
